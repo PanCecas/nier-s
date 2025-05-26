@@ -84,6 +84,8 @@ namespace Ckasz.FinalCharacterController
             Vector3 currentDrag = newVelocity.normalized * drag;
             newVelocity = (newVelocity.magnitude > drag) ?  newVelocity - currentDrag : Vector3.zero;
             newVelocity = Vector3.ClampMagnitude(newVelocity, clampLateralMagnitude);
+          
+            //cree esta variable para solucionar lo del character controller, siempre da0 
             nelocity = newVelocity;
             characterController.Move(newVelocity * Time.deltaTime);
         }
@@ -114,6 +116,8 @@ namespace Ckasz.FinalCharacterController
                 Debug.Log("valor y" + characterController.velocity.z);
                 Debug.Log("magnitud" + lateralVelocity.magnitude);
             } */
+
+            //acabo de hacer el github
             
             
             return lateralVelocity.magnitude > movingThreshold;
