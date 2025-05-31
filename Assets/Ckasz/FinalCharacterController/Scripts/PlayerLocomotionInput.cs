@@ -9,6 +9,7 @@ namespace Ckasz.FinalCharacterController
 
     public class PlayerLocomotionInput : MonoBehaviour, PlayerControls.IPLayerLocomotionMapActions
     {
+        #region Class Variables
         [SerializeField] private bool holdToSprint = true;
 
         public bool SprintToggledOn {  get; private set; }
@@ -16,6 +17,9 @@ namespace Ckasz.FinalCharacterController
         public Vector2 MovementInput { get; private set; }
         public Vector2 LookInput { get; private set; }
 
+        public bool JumpPressed { get; private set; }
+        #endregion
+        #region Starup  
         private void OnEnable()
         {
             PlayerControls = new PlayerControls();
@@ -30,7 +34,14 @@ namespace Ckasz.FinalCharacterController
             PlayerControls.PLayerLocomotionMap.Disable();
             PlayerControls.PLayerLocomotionMap.RemoveCallbacks(this);
         }
-
+        #endregion
+        #region LateUpdate Logic
+        private void LateUpdate()
+        {
+           JumpPressed = false;
+        }
+        #endregion
+        #region Input Callbacks
 
         public void OnMovement(InputAction.CallbackContext context)
         {
@@ -58,6 +69,15 @@ namespace Ckasz.FinalCharacterController
 
 
         }
+
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            if(!context.performed)
+                return;
+
+            JumpPressed = true;
+        }
+        #endregion
     }
 }
 

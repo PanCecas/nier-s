@@ -20,7 +20,10 @@ namespace Ckasz.FinalCharacterController
         public float sprintAcceleration = 0.5f;
         public float sprintSpeed = 7f; 
         public float drag = 0.1f;
+        public float gravity = 25f;
+        public float jumpspeed = 1.0f;
         public float movingThreshold = 0.01f; 
+       
 
         [Header("Camera Settings")]
         public float lookSenseH = 0.1f;
@@ -32,6 +35,8 @@ namespace Ckasz.FinalCharacterController
         private PlayerState playerState;
         private Vector2 cameraRotation = Vector2.zero;
         private Vector2 playerTargetRotation = Vector2.zero;
+
+        private float verticalVelocity = 0f;
         #endregion
 
         #region Startup
@@ -46,6 +51,7 @@ namespace Ckasz.FinalCharacterController
         private void Update()
         {
             UpdateMovementState();
+            HandleVerticalMovement();
             HandleLateralMovement();
         }
 
@@ -54,6 +60,7 @@ namespace Ckasz.FinalCharacterController
             bool isMovementInput = playerLocomotionInput.MovementInput != Vector2.zero;
             bool isMovingLaterally = IsMovingLaterally();
             bool isSprinting = playerLocomotionInput.SprintToggledOn && isMovingLaterally; //false ?
+            bool isGrounded = IsGrounded();
 
            // Debug.Log("is sprinting"+playerLocomotionInput.SprintToggledOn );
            // Debug.Log("is movingLaterally"+isMovingLaterally);
@@ -62,12 +69,38 @@ namespace Ckasz.FinalCharacterController
                                                 isMovingLaterally || isMovementInput ? PlayerMovementState.Running : PlayerMovementState.Idling;
 
             playerState.SetPlayerMovementState(lateralState);
+
+            if (!isGrounded && characterController.velocity.y >= 0f)
+            {
+                playerState.SetPlayerMovementState(PlayerMovementState.Jumping);
+            }
+            else if (!isGrounded && characterController.velocity.y <  0f)
+            {
+                playerState.SetPlayerMovementState(PlayerMovementState.Falling);
+            }
+                
+        }
+
+        private void HandleVerticalMovement()
+        {
+            bool isgrounded = playerState.InGroundedState();
+
+            if (isgrounded && verticalVelocity < 0) 
+                verticalVelocity = 0;
+
+            verticalVelocity -= gravity * Time.deltaTime;
+
+            if (playerLocomotionInput.JumpPressed && isgrounded)
+            {
+                verticalVelocity += Mathf.Sqrt(jumpspeed * 3 * gravity);
+            }
         }
 
         private void HandleLateralMovement()
         {
             // referencia 
             bool isSprinting = playerState.CurrentPlayerMovementState == PlayerMovementState.Sprinting; // true ?  
+            bool isGrounded = playerState.InGroundedState();
 
             float lateralAcceleration = isSprinting ? sprintAcceleration : runAcceleration; 
             float clampLateralMagnitude = isSprinting ? sprintSpeed : runSpeed;
@@ -84,6 +117,7 @@ namespace Ckasz.FinalCharacterController
             Vector3 currentDrag = newVelocity.normalized * drag;
             newVelocity = (newVelocity.magnitude > drag) ?  newVelocity - currentDrag : Vector3.zero;
             newVelocity = Vector3.ClampMagnitude(newVelocity, clampLateralMagnitude);
+            newVelocity.y += verticalVelocity;
           
             //cree esta variable para solucionar lo del character controller, siempre da0 
             nelocity = newVelocity;
@@ -123,6 +157,11 @@ namespace Ckasz.FinalCharacterController
             return lateralVelocity.magnitude > movingThreshold;
 
             
+        }
+
+        private bool IsGrounded()
+        {
+            return characterController.isGrounded;  
         }
         #endregion
     }

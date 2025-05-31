@@ -10,14 +10,18 @@ namespace Ckasz.FinalCharacterController
         [SerializeField] private float locomotionBlendSpeed = 0.02f;
 
         private PlayerLocomotionInput playerLocomotionInput;
+        private PlayerState playerState;
 
         private static int inputXHasH = Animator.StringToHash("inputX");
         private static int inputYHasH = Animator.StringToHash("inputY");
+        private static int inputMagnitudeHash = Animator.StringToHash("inputMagnitude");
+
 
         private Vector3 currentBlendInput = Vector3.zero;
         private void Awake()
         {
             playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
+            playerState = GetComponent<PlayerState>();
         }
 
         private void Update()
@@ -27,11 +31,16 @@ namespace Ckasz.FinalCharacterController
 
         private void UpdateAnimationState()
         {
-            Vector2 inputTarget = playerLocomotionInput.MovementInput;
+            bool iSprinting = playerState.CurrentPlayerMovementState == PlayerMovementState.Sprinting;
+
+            Vector2 inputTarget = iSprinting ?  playerLocomotionInput.MovementInput * 1.5f : playerLocomotionInput.MovementInput;
             currentBlendInput = Vector3.Lerp(currentBlendInput, inputTarget, locomotionBlendSpeed * Time.deltaTime);
+
+
 
             animator.SetFloat(inputXHasH, currentBlendInput.x);
             animator.SetFloat(inputYHasH, currentBlendInput.y);
+            animator.SetFloat(inputMagnitudeHash, currentBlendInput.magnitude);
         }
     }
 }
