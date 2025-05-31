@@ -2326,7 +2326,7 @@ CharacterController:
   m_Radius: 0.18
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 1e-45
   m_Center: {x: 0, y: 0.9, z: 0}
 --- !u!114 &1831090584928236155
@@ -2348,6 +2348,9 @@ MonoBehaviour:
   sprintAcceleration: 65
   sprintSpeed: 10
   drag: 15
+  gravity: 25
+  jumpspeed: 1
+  airControlStrenthg: 1
   movingThreshold: 0.01
   lookSenseH: 0.1
   lookSenseV: 0.1
@@ -2391,7 +2394,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 925681370602588464}
-  locomotionBlendSpeed: 6.5
+  locomotionBlendSpeed: 7.5
 --- !u!1 &5686214720243462905
 GameObject:
   m_ObjectHideFlags: 0

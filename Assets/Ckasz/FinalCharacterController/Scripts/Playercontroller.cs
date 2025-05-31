@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Rendering.VirtualTexturing;
@@ -22,6 +22,8 @@ namespace Ckasz.FinalCharacterController
         public float drag = 0.1f;
         public float gravity = 25f;
         public float jumpspeed = 1.0f;
+        public float airControlStrenthg = 0.2f;
+        private Vector3 airborneLateralVelocity = Vector3.zero;
         public float movingThreshold = 0.01f; 
        
 
@@ -101,6 +103,7 @@ namespace Ckasz.FinalCharacterController
             // referencia 
             bool isSprinting = playerState.CurrentPlayerMovementState == PlayerMovementState.Sprinting; // true ?  
             bool isGrounded = playerState.InGroundedState();
+            
 
             float lateralAcceleration = isSprinting ? sprintAcceleration : runAcceleration; 
             float clampLateralMagnitude = isSprinting ? sprintSpeed : runSpeed;
@@ -113,15 +116,39 @@ namespace Ckasz.FinalCharacterController
             Vector3 movemenDelta = movementDirection * lateralAcceleration;
             Vector3 newVelocity = characterController.velocity + movemenDelta;
 
-
             Vector3 currentDrag = newVelocity.normalized * drag;
-            newVelocity = (newVelocity.magnitude > drag) ?  newVelocity - currentDrag : Vector3.zero;
+            newVelocity = (newVelocity.magnitude > drag) ? newVelocity - currentDrag : Vector3.zero;
             newVelocity = Vector3.ClampMagnitude(newVelocity, clampLateralMagnitude);
             newVelocity.y += verticalVelocity;
-          
+
             //cree esta variable para solucionar lo del character controller, siempre da0 
             nelocity = newVelocity;
-            characterController.Move(newVelocity * Time.deltaTime);
+            characterController.Move(newVelocity * Time.deltaTime); //Character.velocity.x 
+            
+            if (isGrounded)
+            {
+                // este if declara esta velocidad, para el movimiento parabolico 
+                airborneLateralVelocity = new Vector3(newVelocity.x, 0f, newVelocity.z);
+
+                newVelocity.y = verticalVelocity;
+
+            }
+            
+            else
+            {
+                // 🟢 Movimiento en el aire (mantiene inercia + leve control tipo Nier)
+                Vector3 airControl = movementDirection * lateralAcceleration * airControlStrenthg; // 🟢 control en el aire (ajustable)
+                airborneLateralVelocity += airControl;
+                airborneLateralVelocity = Vector3.ClampMagnitude(airborneLateralVelocity, clampLateralMagnitude);
+
+                Vector3 airborneVelocity = airborneLateralVelocity;
+                airborneVelocity.y = verticalVelocity;
+
+                nelocity = airborneVelocity;
+                characterController.Move(airborneVelocity * Time.deltaTime);
+            }
+            
+
         }
         #endregion
 

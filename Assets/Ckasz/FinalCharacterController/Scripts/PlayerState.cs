@@ -17,7 +17,7 @@ namespace Ckasz.FinalCharacterController
         {
             return CurrentPlayerMovementState == PlayerMovementState.Idling ||
                    CurrentPlayerMovementState == PlayerMovementState.Walking ||
-                   CurrentPlayerMovementState == PlayerMovementState.Running ||
+                   CurrentPlayerMovementState == PlayerMovementState.Running ||                 
                    CurrentPlayerMovementState == PlayerMovementState.Sprinting;
         }
     }
