@@ -2348,9 +2348,10 @@ MonoBehaviour:
   sprintAcceleration: 65
   sprintSpeed: 10
   drag: 15
-  gravity: 25
-  jumpspeed: 1
+  gravity: 12
+  jumpspeed: 2.5
   airControlStrenthg: 1
+  landingCooldown: 0.08
   movingThreshold: 0.01
   lookSenseH: 0.1
   lookSenseV: 0.1

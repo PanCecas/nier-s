@@ -31,6 +31,7 @@ namespace Ckasz.FinalCharacterController
         Jumping = 4,
         Falling = 5,
         Strafing = 6,
+        Landing = 7,
     }
 
 }

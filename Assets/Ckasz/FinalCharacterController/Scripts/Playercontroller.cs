@@ -23,9 +23,14 @@ namespace Ckasz.FinalCharacterController
         public float gravity = 25f;
         public float jumpspeed = 1.0f;
         public float airControlStrenthg = 0.2f;
+        public float landingCooldown = 0.2f; 
+        private float verticalVelocity = 0f;
+        private bool wasFallingLastFrame = false;        
+        private float landingTimer = 0f;
+
+        public float movingThreshold = 0.01f;
         private Vector3 airborneLateralVelocity = Vector3.zero;
-        public float movingThreshold = 0.01f; 
-       
+
 
         [Header("Camera Settings")]
         public float lookSenseH = 0.1f;
@@ -37,8 +42,9 @@ namespace Ckasz.FinalCharacterController
         private PlayerState playerState;
         private Vector2 cameraRotation = Vector2.zero;
         private Vector2 playerTargetRotation = Vector2.zero;
+        
 
-        private float verticalVelocity = 0f;
+        
         #endregion
 
         #region Startup
@@ -64,19 +70,72 @@ namespace Ckasz.FinalCharacterController
             bool isSprinting = playerLocomotionInput.SprintToggledOn && isMovingLaterally; //false ?
             bool isGrounded = IsGrounded();
 
-           // Debug.Log("is sprinting"+playerLocomotionInput.SprintToggledOn );
-           // Debug.Log("is movingLaterally"+isMovingLaterally);
+            //quiero saber si islanding o el estado landing si se esta llamando 
+
+            /*Debug.Log($"[DEBUG] CurrentState: {playerState.CurrentPlayerMovementState}, " +
+          $"isGrounded: {isGrounded}, verticalVelocity: {verticalVelocity}, " +
+          $"wasFallingLastFrame: {wasFallingLastFrame}, landingTimer: {landingTimer}"); */
+
+
+            //  BLOQUE 1: Si el personaje está aterrizando, mantener el estado Landing hasta que expire el timer
+            if (playerState.CurrentPlayerMovementState == PlayerMovementState.Landing)
+            {
+                // Reducimos el tiempo de espera de la animación de aterrizaje
+                landingTimer -= Time.deltaTime;
+
+                // Cuando se termina el timer, se decide a qué estado pasar (Idle, Running, Sprinting)
+                if (landingTimer <= 0f)
+                {
+                    PlayerMovementState nextGroundedState = isSprinting ? PlayerMovementState.Sprinting :
+                                                           isMovingLaterally ? PlayerMovementState.Running :
+                                                           PlayerMovementState.Idling;
+
+                    // Transición final hacia locomotion una vez terminada la animación de aterrizaje
+                    playerState.SetPlayerMovementState(nextGroundedState);
+                }
+
+                // Se corta aquí para que nada más pueda cambiar el estado durante el aterrizaje
+                return;
+            }
+
+            // 🟡 BLOQUE 2: Si está en el aire subiendo, está saltando
+            if (!isGrounded && verticalVelocity >= 0f)
+            {
+                playerState.SetPlayerMovementState(PlayerMovementState.Jumping);
+                wasFallingLastFrame = false; // aún no está cayendo
+                Debug.Log("🟡 CAMBIO A JUMPING");
+            }
+            // 🔻 BLOQUE 3: Si está en el aire y bajando, está cayendo
+            else if (!isGrounded && verticalVelocity < 0f)
+            {
+                playerState.SetPlayerMovementState(PlayerMovementState.Falling);
+                wasFallingLastFrame = true; // marcamos que venía cayendo
+                Debug.Log("🔻 CAMBIO A FALLING");
+            }
+            // 🟢 BLOQUE 4: Aterrizó luego de caer → entramos en Landing
+            else if (isGrounded && wasFallingLastFrame)
+            {
+                Debug.Log("🟢 CAMBIO A LANDING");
+                playerState.SetPlayerMovementState(PlayerMovementState.Landing);
+                landingTimer = landingCooldown; // reiniciamos timer de animación de aterrizaje
+                wasFallingLastFrame = false;
+
+                return;
+            }
+
+            // Debug.Log("is sprinting"+playerLocomotionInput.SprintToggledOn );
+            // Debug.Log("is movingLaterally"+isMovingLaterally);
 
             PlayerMovementState lateralState = isSprinting ? PlayerMovementState.Sprinting :
                                                 isMovingLaterally || isMovementInput ? PlayerMovementState.Running : PlayerMovementState.Idling;
 
             playerState.SetPlayerMovementState(lateralState);
 
-            if (!isGrounded && characterController.velocity.y >= 0f)
+            if (!isGrounded && verticalVelocity >= 0f)
             {
                 playerState.SetPlayerMovementState(PlayerMovementState.Jumping);
             }
-            else if (!isGrounded && characterController.velocity.y <  0f)
+            else if (!isGrounded && verticalVelocity <  0f)
             {
                 playerState.SetPlayerMovementState(PlayerMovementState.Falling);
             }
