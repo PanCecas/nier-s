@@ -23,10 +23,11 @@ namespace Ckasz.FinalCharacterController
         public float gravity = 25f;
         public float jumpspeed = 1.0f;
         public float airControlStrenthg = 0.2f;
-        public float landingCooldown = 0.2f; 
+        public float landingCooldown = 0.2f;
+        private float landingTimer = 0f;
         private float verticalVelocity = 0f;
         private bool wasFallingLastFrame = false;        
-        private float landingTimer = 0f;
+        
 
         public float movingThreshold = 0.01f;
         private Vector3 airborneLateralVelocity = Vector3.zero;
