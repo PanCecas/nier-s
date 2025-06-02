@@ -87,7 +87,7 @@ namespace Ckasz.FinalCharacterController
             // Instanciar proyectil con rotación hacia la dirección deseada
             GameObject projectile = Instantiate(smallProjectilePrefab, shootPoint.position, Quaternion.LookRotation(shootDirection));
 
-            Debug.Log("🔥 Proyectil instanciado en: " + shootPoint.position);
+            Debug.Log(" Proyectil instanciado en: " + shootPoint.position);
 
 
             // Aplicar velocidad al Rigidbody
