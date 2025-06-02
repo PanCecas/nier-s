@@ -6,6 +6,13 @@ namespace Ckasz.FinalCharacterController
 {
     public class PlayerState : MonoBehaviour
     {
+        [field: SerializeField] public PlayerCombatState CurrentPlayerCombatState {  get; private set; } = PlayerCombatState.Unarmed;
+
+            public void SetPlayerCombatState( PlayerCombatState playerCombatState)
+        {
+            CurrentPlayerCombatState = playerCombatState;
+        }
+
         [field:SerializeField] public PlayerMovementState CurrentPlayerMovementState {  get; private set; } = PlayerMovementState.Idling;
 
         public void SetPlayerMovementState(PlayerMovementState playerMovementState)
@@ -21,7 +28,12 @@ namespace Ckasz.FinalCharacterController
                    CurrentPlayerMovementState == PlayerMovementState.Sprinting;
         }
     }
-
+    public enum PlayerCombatState
+    {
+        Unarmed = 0,
+        Charging = 1,
+        Armed = 2
+    }
     public enum PlayerMovementState
     {
         Idling = 0,

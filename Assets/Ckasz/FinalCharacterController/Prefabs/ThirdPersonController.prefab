@@ -2257,6 +2257,7 @@ GameObject:
   - component: {fileID: 7712351012891219390}
   - component: {fileID: 2360011312548190130}
   - component: {fileID: 5706187377420504639}
+  - component: {fileID: 59501764149985358}
   m_Layer: 0
   m_Name: ThirdPersonController
   m_TagString: Untagged
@@ -2381,6 +2382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2cb187db80132cd43931fb373ab91cc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <CurrentPlayerCombatState>k__BackingField: 0
   <CurrentPlayerMovementState>k__BackingField: 0
 --- !u!114 &5706187377420504639
 MonoBehaviour:
@@ -2396,6 +2398,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 925681370602588464}
   locomotionBlendSpeed: 7.5
+--- !u!114 &59501764149985358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5534432072119658999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edd9068c6058cd9408616571c12c8f6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  input: {fileID: 0}
+  playerState: {fileID: 0}
+  animator: {fileID: 0}
+  smallProjectilePrefab: {fileID: 0}
+  rightShootPoint: {fileID: 0}
+  leftShootPoint: {fileID: 0}
+  timeBetweenShots: 0.2
 --- !u!1 &5686214720243462905
 GameObject:
   m_ObjectHideFlags: 0

@@ -128,6 +128,33 @@ namespace Ckasz.FinalCharacterController
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MeleeAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""64032a3d-10ac-464b-87dc-cb5ea93dc6d8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RangeAttack"",
+                    ""type"": ""Button"",
+                    ""id"": ""e9b7d66c-51bf-4e57-b0c7-7862789a3faf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""14da1f1a-5bf1-4764-9491-8b638c76e7c2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -273,6 +300,39 @@ namespace Ckasz.FinalCharacterController
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b0be1e5f-fd24-437d-ab5a-1eb1cf904d2d"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MeleeAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5bb762fa-187d-4af5-8c21-232a8c52b23b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RangeAttack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb92d521-3cd3-47cd-bc95-8e255cf06b05"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -285,6 +345,9 @@ namespace Ckasz.FinalCharacterController
             m_PLayerLocomotionMap_Look = m_PLayerLocomotionMap.FindAction("Look", throwIfNotFound: true);
             m_PLayerLocomotionMap_ToggleSprint = m_PLayerLocomotionMap.FindAction("ToggleSprint", throwIfNotFound: true);
             m_PLayerLocomotionMap_Jump = m_PLayerLocomotionMap.FindAction("Jump", throwIfNotFound: true);
+            m_PLayerLocomotionMap_MeleeAttack = m_PLayerLocomotionMap.FindAction("MeleeAttack", throwIfNotFound: true);
+            m_PLayerLocomotionMap_RangeAttack = m_PLayerLocomotionMap.FindAction("RangeAttack", throwIfNotFound: true);
+            m_PLayerLocomotionMap_Interact = m_PLayerLocomotionMap.FindAction("Interact", throwIfNotFound: true);
         }
 
         ~@PlayerControls()
@@ -369,6 +432,9 @@ namespace Ckasz.FinalCharacterController
         private readonly InputAction m_PLayerLocomotionMap_Look;
         private readonly InputAction m_PLayerLocomotionMap_ToggleSprint;
         private readonly InputAction m_PLayerLocomotionMap_Jump;
+        private readonly InputAction m_PLayerLocomotionMap_MeleeAttack;
+        private readonly InputAction m_PLayerLocomotionMap_RangeAttack;
+        private readonly InputAction m_PLayerLocomotionMap_Interact;
         /// <summary>
         /// Provides access to input actions defined in input action map "PLayerLocomotionMap".
         /// </summary>
@@ -396,6 +462,18 @@ namespace Ckasz.FinalCharacterController
             /// Provides access to the underlying input action "PLayerLocomotionMap/Jump".
             /// </summary>
             public InputAction @Jump => m_Wrapper.m_PLayerLocomotionMap_Jump;
+            /// <summary>
+            /// Provides access to the underlying input action "PLayerLocomotionMap/MeleeAttack".
+            /// </summary>
+            public InputAction @MeleeAttack => m_Wrapper.m_PLayerLocomotionMap_MeleeAttack;
+            /// <summary>
+            /// Provides access to the underlying input action "PLayerLocomotionMap/RangeAttack".
+            /// </summary>
+            public InputAction @RangeAttack => m_Wrapper.m_PLayerLocomotionMap_RangeAttack;
+            /// <summary>
+            /// Provides access to the underlying input action "PLayerLocomotionMap/Interact".
+            /// </summary>
+            public InputAction @Interact => m_Wrapper.m_PLayerLocomotionMap_Interact;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -434,6 +512,15 @@ namespace Ckasz.FinalCharacterController
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @MeleeAttack.started += instance.OnMeleeAttack;
+                @MeleeAttack.performed += instance.OnMeleeAttack;
+                @MeleeAttack.canceled += instance.OnMeleeAttack;
+                @RangeAttack.started += instance.OnRangeAttack;
+                @RangeAttack.performed += instance.OnRangeAttack;
+                @RangeAttack.canceled += instance.OnRangeAttack;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
 
             /// <summary>
@@ -457,6 +544,15 @@ namespace Ckasz.FinalCharacterController
                 @Jump.started -= instance.OnJump;
                 @Jump.performed -= instance.OnJump;
                 @Jump.canceled -= instance.OnJump;
+                @MeleeAttack.started -= instance.OnMeleeAttack;
+                @MeleeAttack.performed -= instance.OnMeleeAttack;
+                @MeleeAttack.canceled -= instance.OnMeleeAttack;
+                @RangeAttack.started -= instance.OnRangeAttack;
+                @RangeAttack.performed -= instance.OnRangeAttack;
+                @RangeAttack.canceled -= instance.OnRangeAttack;
+                @Interact.started -= instance.OnInteract;
+                @Interact.performed -= instance.OnInteract;
+                @Interact.canceled -= instance.OnInteract;
             }
 
             /// <summary>
@@ -525,6 +621,27 @@ namespace Ckasz.FinalCharacterController
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnJump(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "MeleeAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnMeleeAttack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "RangeAttack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnRangeAttack(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Interact" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnInteract(InputAction.CallbackContext context);
         }
     }
 }

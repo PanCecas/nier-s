@@ -18,6 +18,8 @@ namespace Ckasz.FinalCharacterController
         public Vector2 LookInput { get; private set; }
 
         public bool JumpPressed { get; private set; }
+        public bool RangedAttackStarted { get; private set; }
+        public bool RangedAttackReleased { get; private set; }
         #endregion
         #region Starup  
         private void OnEnable()
@@ -39,6 +41,8 @@ namespace Ckasz.FinalCharacterController
         private void LateUpdate()
         {
            JumpPressed = false;
+            RangedAttackStarted = false;
+            RangedAttackReleased = false;
         }
         #endregion
         #region Input Callbacks
@@ -76,6 +80,25 @@ namespace Ckasz.FinalCharacterController
                 return;
 
             JumpPressed = true;
+        }
+
+        public void OnMeleeAttack(InputAction.CallbackContext context)
+        {
+            // Temporal: para evitar errores hasta que lo implementes
+        }
+
+        public void OnRangeAttack(InputAction.CallbackContext context)
+        {
+            if (context.started)
+                RangedAttackStarted = true;
+
+            if (context.canceled)
+                RangedAttackReleased = true;
+        }
+
+        public void OnInteract(InputAction.CallbackContext context)
+        {
+            // Temporal: para evitar errores hasta que lo implementes
         }
         #endregion
     }
