@@ -809,8 +809,8 @@ GameObject:
   - component: {fileID: 7239931688814339521}
   - component: {fileID: 1327990888916974080}
   - component: {fileID: 4698324404321667501}
-  - component: {fileID: 8435245340654109920}
   - component: {fileID: 8315523368021205708}
+  - component: {fileID: 1484738919212388387}
   m_Layer: 7
   m_Name: EnemyAI
   m_TagString: Player
@@ -913,20 +913,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 4550328272680753336}
   locomotionBlendSpeed: 7.5
---- !u!114 &8435245340654109920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2282221402180618272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1169129c6463ea641b8af9c35fc5fb84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shootInterval: 2
-  playerTarget: {fileID: 0}
 --- !u!114 &8315523368021205708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -954,6 +940,23 @@ MonoBehaviour:
   lookSenseH: 0.1
   lookSenseV: 0.1
   lookLimitV: 89
+--- !u!114 &1484738919212388387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2282221402180618272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 113d796a4168ad849afac4574b964bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTarget: {fileID: 0}
+  visionAngle: 180
+  walkDistance: 6
+  sprintDistance: 12
+  decisionInterval: 1
 --- !u!1 &2596675519933294289
 GameObject:
   m_ObjectHideFlags: 0
@@ -2381,7 +2384,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 0242dd92627927e4f825593fe1b208b8, type: 2}
+  - {fileID: 2100000, guid: 4094c773de56d8943bcb4e3e6de74c72, type: 2}
   - {fileID: -4183559054646371188, guid: c7dc333b6e16f49488df8bcc51735e16, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0

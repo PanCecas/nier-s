@@ -56,17 +56,14 @@ namespace Ckasz.FinalCharacterController
         #region Startup
         private void Awake()
         {
-            inputSource = GetComponent<PlayerLocomotionInput>();
-            if (inputSource == null)
-                inputSource = GetComponent<NemesisInputSimulator>();
-
-            input = inputSource as IInputSource;
+            input = GetComponent<IInputSource>();
 
             if (input == null)
-                Debug.LogError("❌ El objeto no implementa IInputSource correctamente");
+                Debug.LogError("❌ Este GameObject no tiene un componente que implemente IInputSource");
 
             playerState = GetComponent<PlayerState>();
         }
+
 
 
         #endregion
