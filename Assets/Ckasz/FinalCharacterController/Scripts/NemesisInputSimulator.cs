@@ -40,37 +40,37 @@ namespace Ckasz.FinalCharacterController
             decisionTimer -= Time.deltaTime;
             shootTimer -= Time.deltaTime;
 
+            // Dirección y distancia
             Vector3 toPlayer = playerTarget.position - transform.position;
             float distanceToPlayer = toPlayer.magnitude;
 
-            // Movimiento si está lejos
-            if (distanceToPlayer > minDistanceToStop)
+            // 🧠 Movimiento según distancia
+            if (distanceToPlayer > 6f)
             {
-                Vector3 flatDir = new Vector3(toPlayer.x, 0f, toPlayer.z).normalized;
-                MovementInput = new Vector2(flatDir.x, flatDir.z);
+                SprintToggledOn = true;
+                MovementInput = new Vector2(0f, 1f);
+
+            }
+            else if (distanceToPlayer > 2.5f)
+            {
+                SprintToggledOn = false;
+                MovementInput = new Vector2(0f, 1f);
+
             }
             else
             {
                 MovementInput = Vector2.zero;
             }
 
-            // Rotar en eje Y hacia el jugador
-            Vector3 directionToPlayer = new Vector3(toPlayer.x, 0f, toPlayer.z);
-            if (directionToPlayer != Vector3.zero)
+            // 🔁 Rotar hacia el jugador
+            Vector3 lookDir = new Vector3(toPlayer.x, 0f, toPlayer.z);
+            if (lookDir != Vector3.zero)
             {
-                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer.normalized);
-                Quaternion yOnlyRotation = Quaternion.Euler(0f, lookRotation.eulerAngles.y, 0f);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, yOnlyRotation, Time.deltaTime * 720f);
+                Quaternion targetRot = Quaternion.LookRotation(lookDir);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
             }
 
-            // Sprint aleatorio
-            if (decisionTimer <= 0f)
-            {
-                SprintToggledOn = Random.value > 0.5f;
-                decisionTimer = decisionInterval;
-            }
-
-            // Disparo con cooldown
+            // 🔫 Disparo con cooldown
             if (shootTimer <= 0f)
             {
                 RangedAttackStarted = true;
@@ -83,5 +83,6 @@ namespace Ckasz.FinalCharacterController
                 RangedAttackReleased = false;
             }
         }
+
     }
 }

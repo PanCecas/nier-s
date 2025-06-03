@@ -319,19 +319,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 193326887925657884, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.046677772
       objectReference: {fileID: 0}
     - target: {fileID: 193326887925657884, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 193326887925657884, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.99891
       objectReference: {fileID: 0}
     - target: {fileID: 193326887925657884, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 193326887925657884, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -339,7 +339,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 193326887925657884, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -174.649
       objectReference: {fileID: 0}
     - target: {fileID: 193326887925657884, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -349,26 +349,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyAI
       objectReference: {fileID: 0}
-    - target: {fileID: 8315523368021205708, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
+    - target: {fileID: 3111416549201643718, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: runSpeed
-      value: 4
+      value: 3.7
       objectReference: {fileID: 0}
-    - target: {fileID: 8315523368021205708, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
+    - target: {fileID: 3111416549201643718, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: sprintSpeed
-      value: 3.17
+      value: 9.27
       objectReference: {fileID: 0}
-    - target: {fileID: 8315523368021205708, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
-      propertyPath: runAcceleration
-      value: 35
+    - target: {fileID: 3111416549201643718, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
+      propertyPath: acceleration
+      value: 33.4
       objectReference: {fileID: 0}
-    - target: {fileID: 8315523368021205708, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
+    - target: {fileID: 3111416549201643718, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
+      propertyPath: playerTarget
+      value: 
+      objectReference: {fileID: 1125772617}
+    - target: {fileID: 3111416549201643718, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: sprintAcceleration
-      value: 42.7
+      value: 61.4
       objectReference: {fileID: 0}
     - target: {fileID: 8435245340654109920, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: playerTarget
       value: 
       objectReference: {fileID: 1125772617}
+    - target: {fileID: 8435245340654109920, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
+      propertyPath: decisionInterval
+      value: 0.96
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
