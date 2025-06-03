@@ -349,6 +349,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyAI
       objectReference: {fileID: 0}
+    - target: {fileID: 8087192700370804403, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4094c773de56d8943bcb4e3e6de74c72, type: 2}
     - target: {fileID: 8435245340654109920, guid: a37d7ec538f44c244821d6d2b1fd2342, type: 3}
       propertyPath: playerTarget
       value: 

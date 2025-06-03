@@ -925,7 +925,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1169129c6463ea641b8af9c35fc5fb84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decisionInterval: 1.5
   shootInterval: 2
   playerTarget: {fileID: 0}
 --- !u!114 &8315523368021205708
@@ -940,15 +939,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de71cc42956eb2e44a93058b3f5cd330, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 0}
+  characterController: {fileID: 7239931688814339521}
   playercamera: {fileID: 0}
-  runAcceleration: 0.25
+  runAcceleration: 35
   runSpeed: 4
-  sprintAcceleration: 0.5
-  sprintSpeed: 7
-  drag: 0.1
-  gravity: 25
-  jumpspeed: 1
+  sprintAcceleration: 65
+  sprintSpeed: 10
+  drag: 15
+  gravity: 12
+  jumpspeed: 2.5
   airControlStrenthg: 0.2
   landingCooldown: 0.2
   movingThreshold: 0.01
