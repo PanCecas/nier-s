@@ -7,7 +7,7 @@ namespace Ckasz.FinalCharacterController
 {
     [DefaultExecutionOrder(-2)]
 
-    public class PlayerLocomotionInput : MonoBehaviour, PlayerControls.IPLayerLocomotionMapActions
+    public class PlayerLocomotionInput : MonoBehaviour, PlayerControls.IPLayerLocomotionMapActions, IInputSource
     {
         #region Class Variables
         [SerializeField] private bool holdToSprint = true;

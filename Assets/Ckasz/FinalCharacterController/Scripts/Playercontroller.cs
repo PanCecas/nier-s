@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.Rendering.VirtualTexturing;
+using Ckasz.FinalCharacterController;
+
 
 namespace Ckasz.FinalCharacterController
 {
@@ -39,21 +41,34 @@ namespace Ckasz.FinalCharacterController
         public float lookLimitV = 89f;
 
 
-        private PlayerLocomotionInput playerLocomotionInput;
+        //private PlayerLocomotionInput playerLocomotionInput;
+        private MonoBehaviour inputSource;
+        private IInputSource input;
+
         private PlayerState playerState;
         private Vector2 cameraRotation = Vector2.zero;
         private Vector2 playerTargetRotation = Vector2.zero;
-        
 
-        
+
+
         #endregion
 
         #region Startup
         private void Awake()
         {
-            playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
+            inputSource = GetComponent<PlayerLocomotionInput>();
+            if (inputSource == null)
+                inputSource = GetComponent<NemesisInputSimulator>();
+
+            input = inputSource as IInputSource;
+
+            if (input == null)
+                Debug.LogError("❌ El objeto no implementa IInputSource correctamente");
+
             playerState = GetComponent<PlayerState>();
         }
+
+
         #endregion
 
         #region Update Logic
@@ -66,9 +81,9 @@ namespace Ckasz.FinalCharacterController
 
         private void UpdateMovementState()
         {
-            bool isMovementInput = playerLocomotionInput.MovementInput != Vector2.zero;
+            bool isMovementInput = input.MovementInput != Vector2.zero;
             bool isMovingLaterally = IsMovingLaterally();
-            bool isSprinting = playerLocomotionInput.SprintToggledOn && isMovingLaterally; //false ?
+            bool isSprinting = input.SprintToggledOn && isMovingLaterally;
             bool isGrounded = IsGrounded();
 
             //quiero saber si islanding o el estado landing si se esta llamando 
@@ -152,7 +167,7 @@ namespace Ckasz.FinalCharacterController
 
             verticalVelocity -= gravity * Time.deltaTime;
 
-            if (playerLocomotionInput.JumpPressed && isgrounded)
+            if (input.JumpPressed && isgrounded)
             {
                 verticalVelocity += Mathf.Sqrt(jumpspeed * 3 * gravity);
             }
@@ -169,9 +184,22 @@ namespace Ckasz.FinalCharacterController
             float clampLateralMagnitude = isSprinting ? sprintSpeed : runSpeed;
 
 
-            Vector3 cameraForwardXZ = new Vector3(playercamera.transform.forward.x, 0f, playercamera.transform.forward.z).normalized;
-            Vector3 cameraRightYZ = new Vector3(playercamera.transform.right.x, 0f, playercamera.transform.right.z).normalized;
-            Vector3 movementDirection = cameraRightYZ * playerLocomotionInput.MovementInput.x + cameraForwardXZ * playerLocomotionInput.MovementInput.y;
+            Vector3 movementDirection;
+
+            if (playercamera != null)
+            {
+                Vector3 cameraForwardXZ = new Vector3(playercamera.transform.forward.x, 0f, playercamera.transform.forward.z).normalized;
+                Vector3 cameraRightYZ = new Vector3(playercamera.transform.right.x, 0f, playercamera.transform.right.z).normalized;
+                movementDirection = cameraRightYZ * input.MovementInput.x + cameraForwardXZ * input.MovementInput.y;
+            }
+            else
+            {
+                Vector3 forward = transform.forward;
+                Vector3 right = transform.right;
+                movementDirection = right * input.MovementInput.x + forward * input.MovementInput.y;
+            }
+
+
 
             Vector3 movemenDelta = movementDirection * lateralAcceleration;
             Vector3 newVelocity = characterController.velocity + movemenDelta;
@@ -215,13 +243,17 @@ namespace Ckasz.FinalCharacterController
         #region Late Update Logic
         private void LateUpdate()
         {
-            cameraRotation.x += lookSenseH * playerLocomotionInput.LookInput.x;
-            cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookSenseV * playerLocomotionInput.LookInput.y, -lookLimitV, lookLimitV);
+            if (playercamera != null)
+            {
+                cameraRotation.x += lookSenseH * input.LookInput.x;
+                cameraRotation.y = Mathf.Clamp(cameraRotation.y - lookSenseV * input.LookInput.y, -lookLimitV, lookLimitV);
 
-            playerTargetRotation.x += transform.eulerAngles.x + lookSenseH * playerLocomotionInput.LookInput.x;
+                playerTargetRotation.x += transform.eulerAngles.x + lookSenseH * input.LookInput.x;
+                playercamera.transform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0f);
+            }
+
             transform.rotation = Quaternion.Euler(0f, playerTargetRotation.x, 0f);
 
-            playercamera.transform.rotation = Quaternion.Euler(cameraRotation.y, cameraRotation.x, 0f);
 
         }
         #endregion

@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
+
 namespace Ckasz.FinalCharacterController
 {
     public class PlayerAnimation : MonoBehaviour
@@ -9,7 +10,10 @@ namespace Ckasz.FinalCharacterController
         [SerializeField] private Animator animator;
         [SerializeField] private float locomotionBlendSpeed = 0.02f;
 
-        private PlayerLocomotionInput playerLocomotionInput;
+        private MonoBehaviour inputSource;
+        private IInputSource input;
+
+
         private PlayerState playerState;
 
         private static int inputXHasH = Animator.StringToHash("inputX");
@@ -24,9 +28,13 @@ namespace Ckasz.FinalCharacterController
         private Vector3 currentBlendInput = Vector3.zero;
         private void Awake()
         {
-            playerLocomotionInput = GetComponent<PlayerLocomotionInput>();
+            input = GetComponent<IInputSource>();
             playerState = GetComponent<PlayerState>();
+            animator = GetComponent<Animator>();
         }
+
+
+
 
         private void Update()
         {
@@ -44,10 +52,10 @@ namespace Ckasz.FinalCharacterController
 
             bool isGrounded = playerState.InGroundedState();
 
-            
 
 
-            Vector2 inputTarget = iSprinting ?  playerLocomotionInput.MovementInput * 1.5f : playerLocomotionInput.MovementInput;
+
+            Vector2 inputTarget = iSprinting ? input.MovementInput * 1.5f : input.MovementInput;
             currentBlendInput = Vector3.Lerp(currentBlendInput, inputTarget, locomotionBlendSpeed * Time.deltaTime);
 
 
