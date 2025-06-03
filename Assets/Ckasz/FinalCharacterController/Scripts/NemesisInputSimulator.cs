@@ -14,10 +14,24 @@ namespace Ckasz.FinalCharacterController
         [Header("Behavior Settings")]
         public float decisionInterval = 1.5f;
         public float shootInterval = 2f;
+        public float minDistanceToStop = 2f;
+
         public Transform playerTarget;
 
         private float decisionTimer = 0f;
         private float shootTimer = 0f;
+
+        private void Awake()
+        {
+            if (playerTarget == null)
+            {
+                GameObject player = GameObject.FindWithTag("Player");
+                if (player != null)
+                    playerTarget = player.transform;
+                else
+                    Debug.LogWarning("NemesisInputSimulator: No se encontró ningún GameObject con tag 'Player'. Asigna manualmente el playerTarget.");
+            }
+        }
 
         private void Update()
         {
@@ -26,26 +40,37 @@ namespace Ckasz.FinalCharacterController
             decisionTimer -= Time.deltaTime;
             shootTimer -= Time.deltaTime;
 
-            // Dirección hacia el jugador
-            Vector3 dir = (playerTarget.position - transform.position).normalized;
-            Vector3 flatDir = new Vector3(dir.x, 0f, dir.z);
-            MovementInput = new Vector2(flatDir.x, flatDir.z).normalized;
+            Vector3 toPlayer = playerTarget.position - transform.position;
+            float distanceToPlayer = toPlayer.magnitude;
 
-            // 🔁 Rotar hacia el jugador
-            Vector3 lookDir = playerTarget.position - transform.position;
-            lookDir.y = 0f;
-            if (lookDir != Vector3.zero)
+            // Movimiento si está lejos
+            if (distanceToPlayer > minDistanceToStop)
             {
-                Quaternion targetRot = Quaternion.LookRotation(lookDir);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, Time.deltaTime * 10f);
+                Vector3 flatDir = new Vector3(toPlayer.x, 0f, toPlayer.z).normalized;
+                MovementInput = new Vector2(flatDir.x, flatDir.z);
+            }
+            else
+            {
+                MovementInput = Vector2.zero;
             }
 
+            // Rotar en eje Y hacia el jugador
+            Vector3 directionToPlayer = new Vector3(toPlayer.x, 0f, toPlayer.z);
+            if (directionToPlayer != Vector3.zero)
+            {
+                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer.normalized);
+                Quaternion yOnlyRotation = Quaternion.Euler(0f, lookRotation.eulerAngles.y, 0f);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, yOnlyRotation, Time.deltaTime * 720f);
+            }
+
+            // Sprint aleatorio
             if (decisionTimer <= 0f)
             {
                 SprintToggledOn = Random.value > 0.5f;
                 decisionTimer = decisionInterval;
             }
 
+            // Disparo con cooldown
             if (shootTimer <= 0f)
             {
                 RangedAttackStarted = true;
